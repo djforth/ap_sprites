@@ -1,13 +1,12 @@
 {
   "name": "@djforth/ap_sprites",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "description": "",
   "main": "index.js",
-   "bin": {
+  "bin": {
     "asset-pipeline-sprites": "./bin/build.js"
   },
   "scripts": {
-
     "test": "asset-pipeline-sprites"
   },
   "repository": {
