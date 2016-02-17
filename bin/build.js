@@ -24,7 +24,6 @@ var manageFiles = storeFiles();
 var options = ["ext", "input", "output", "cssout", "css", "scss"]
 
 options.forEach(function(op){
-  console.log(program[op])
   if(!_.isEmpty(program[op]) || program[op]){
     config.set(op, program[op])
   }

@@ -11,21 +11,20 @@ create.folder(config.get("output"))
 
 
 function getSpritePath(root_path, output){
-  var filename = "sprite.png";
-  var obj = {
-     setFilename:function(fn){
-       filename = fn+".png";
-       return obj;
-     }
-    , getRootPath:function(){
-      return root_path+"/"+filename;
-    }
-    , getSpriteName:function(){
-      return path.resolve(output, filename)
+
+  return function(fn){
+    var filename = fn+".png";
+
+    return {
+      getRootPath:function(){
+        return root_path+"/"+filename;
+      }
+      , getSpriteName:function(){
+        return path.resolve(output, filename)
+      }
     }
   }
 
-  return obj;
 }
 
 function createSprite(files, sprite_path, cb){
@@ -38,7 +37,7 @@ function createSprite(files, sprite_path, cb){
       console.warn(err);
     }
     //Write the sprite
-
+    console.log(sprite_path.getSpriteName())
     fs.writeFileSync(sprite_path.getSpriteName(), result.image, 'binary');
 
     cb(result);
@@ -48,7 +47,7 @@ function createSprite(files, sprite_path, cb){
 
 function build_css(root_path, output){
   return function(result){
-    console.log(buildSCSS)
+
     buildSCSS(result, root_path, output);
   }
 }
@@ -58,11 +57,11 @@ module.exports = function(manageFiles){
   var sprites = manageFiles();
   var sprite_path = getSpritePath(config.get("root_path"), config.get("output"));
   _.forIn(sprites, function(files, output){
-    sprite_path.setFilename(output);
+    sp_path = sprite_path(output);
     createSprite(
         files
-      , sprite_path
-      , build_css(sprite_path.getRootPath(), output)
+      , sp_path
+      , build_css(sp_path.getRootPath(), output)
     );
   })
 }
