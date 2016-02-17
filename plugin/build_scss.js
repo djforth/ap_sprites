@@ -1,8 +1,11 @@
 var _           = require("lodash")
   , config      = require("./config")
+  , create      = require('@djforth/ap_utils').create
   , fs          = require('fs')
   , path        = require('path')
   , templater   = require('spritesheet-templates')
+
+create.folder(config.get("cssout"))
 
 function addImageUrl(data){
   return data.replace(/url\(([^)]*)\)/igm,"image-url('$1')")
@@ -42,7 +45,7 @@ function processSpritesheet(sheet, iu){
   var obj = {
     add:function(type){
       var css = sheet(type);
-      sprite_css += (ui) ? addImageUrl(css) : css;
+      sprite_css += (iu) ? addImageUrl(css) : css;
       return obj;
     }
     , result:function(){
@@ -54,13 +57,14 @@ function processSpritesheet(sheet, iu){
 }
 
 // Builds css
-var buildSCSS = function(result, sprite, output){
+module.exports = function(result, sprite, output){
   var coords = getCoordinates(result.coordinates)
   var sheet  = getSpriteSheet(coords, result.properties, sprite);
   var sprite_css = processSpritesheet(sheet, config.get("image_url"));
 
-  if(config.get("css")) sprite_css.add("css");
   if(config.get("scss")) sprite_css.add("scss");
+  if(config.get("css")) sprite_css.add("css");
+
 
   var file = path.resolve(config.get("cssout"), setName(output, config.get("scss")));
   fs.writeFileSync(file, sprite_css.result());

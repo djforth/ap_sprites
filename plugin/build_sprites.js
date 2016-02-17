@@ -1,8 +1,14 @@
 var _           = require("lodash")
   , buildSCSS   = require("./build_scss")
   , config      = require("./config")
+  , create      = require('@djforth/ap_utils').create
   , fs          = require('fs')
+  , path        = require('path')
   , spritesmith = require('spritesmith');
+
+
+create.folder(config.get("output"))
+
 
 function getSpritePath(root_path, output){
   var filename = "sprite.png";
@@ -32,6 +38,7 @@ function createSprite(files, sprite_path, cb){
       console.warn(err);
     }
     //Write the sprite
+
     fs.writeFileSync(sprite_path.getSpriteName(), result.image, 'binary');
 
     cb(result);
@@ -41,6 +48,7 @@ function createSprite(files, sprite_path, cb){
 
 function build_css(root_path, output){
   return function(result){
+    console.log(buildSCSS)
     buildSCSS(result, root_path, output);
   }
 }

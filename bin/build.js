@@ -2,6 +2,7 @@
 
 var _            = require('lodash')
   , config       = require("../plugin/config")
+  , es           = require("event-stream")
   , fs           = require('fs')
   , read         = require('@djforth/ap_utils').read
   , path         = require('path')
@@ -11,7 +12,7 @@ var _            = require('lodash')
 
  program
   .version('0.0.1')
-  .option('-e, --ext <list>', 'exts to process', [])
+  .option('-e, --ext <list>', 'exts to process')
   .option('-i, --input <folder>', 'input folder')
   .option('-o, --output <folder>', 'output folder')
   .option('-co, --cssout <folder>', 'css output folder')
