@@ -26,10 +26,10 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
-    "@djforth/ap_utils": "^2.0.8",
+    "@djforth/ap_utils": "^2.0.9",
     "commander": "^2.9.0",
     "event-stream": "^3.3.2",
-    "lodash": "^4.4.0",
+    "lodash": "^4.6.0",
     "readdirp": "^2.0.0",
     "spritesheet-templates": "^10.1.0",
     "spritesmith": "^3.1.0"
