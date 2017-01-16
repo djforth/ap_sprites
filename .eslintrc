@@ -1,0 +1,7 @@
+{
+  "extends": "morsedigital",
+  "rules": {
+    "require-jsdoc": 0,
+    "no-console": 0
+  }
+}

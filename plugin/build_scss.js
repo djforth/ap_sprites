@@ -1,71 +1,73 @@
-var _           = require("lodash")
-  , config      = require("./config")
-  , create      = require('@djforth/ap_utils').create
-  , fs          = require('fs')
-  , path        = require('path')
-  , templater   = require('spritesheet-templates')
+var _           = require('lodash');
+var config      = require('./config');
+var create      = require('@djforth/ap_utils').create;
+var fs          = require('fs');
+var path        = require('path');
+var templater   = require('spritesheet-templates');
 
-create.folder(config.get("cssout"))
+create.folder(config.get('cssout'));
 
 function addImageUrl(data){
-  return data.replace(/url\(([^)]*)\)/igm,"image-url('$1')")
+  return data.replace(/url\(([^)]*)\)/igm, "image-url('$1')");
 }
 
 function setName(output, scss){
-  var ext = (scss) ? ".scss" : ".css"
-  return "_" + output + ext;
+  var ext = (scss) ? '.scss' : '.css';
+  return '_' + output + ext;
 }
 
 function getCoordinates(coordinates){
-  var coords = []
-  _.forIn(coordinates, (v,k)=>{
+  var coords = [];
+  _.forIn(coordinates, (v, k)=>{
     var obj = {
-      name: path.parse(k).name,
-    }
-    coords.push(_.merge(obj, v))
+      name: path.parse(k).name
+    };
+    coords.push(_.merge(obj, v));
   });
 
-  return coords
+  return coords;
 }
 
 function getSpriteSheet(sprites, props, spritesheet){
   return function(fmt){
-     return templater({
-        sprites: sprites,
-        spritesheet: {
-          width: props.width, height: props.height, image: spritesheet
-        }
-      }, {format: fmt})
-  }
+    return templater({
+      sprites: sprites
+      , spritesheet: {
+        width: props.width, height: props.height, image: spritesheet
+      }
+    }, {format: fmt});
+  };
 }
 
 function processSpritesheet(sheet, iu){
-  var sprite_css = ""
+  var sprite_css = '';
 
   var obj = {
-    add:function(type){
+    add: function(type){
       var css = sheet(type);
       sprite_css += (iu) ? addImageUrl(css) : css;
       return obj;
     }
-    , result:function(){
+    , result: function(){
       return sprite_css;
     }
-  }
+  };
 
   return obj;
 }
 
 // Builds css
 module.exports = function(result, sprite, output){
-  var coords = getCoordinates(result.coordinates)
+  var coords = getCoordinates(result.coordinates);
   var sheet  = getSpriteSheet(coords, result.properties, sprite);
-  var sprite_css = processSpritesheet(sheet, config.get("image_url"));
+  var sprite_css = processSpritesheet(sheet, config.get('image_url'));
 
-  if(config.get("scss")) sprite_css.add("scss");
-  if(config.get("css")) sprite_css.add("css");
+  if (config.get('scss')) sprite_css.add('scss');
+  if (config.get('css')) sprite_css.add('css');
 
-
-  var file = path.resolve(config.get("cssout"), setName(output, config.get("scss")));
+  var file = path.resolve(
+    config.get('cssout')
+    , setName(output, config.get('scss'))
+  );
   fs.writeFileSync(file, sprite_css.result());
-}
+};

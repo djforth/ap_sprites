@@ -1,40 +1,33 @@
 {
   "name": "@djforth/ap_sprites",
-  "version": "1.0.10",
-  "description": "",
+  "version": "1.0.0",
   "main": "index.js",
+  "repository": "git@github.com:djforth/ap_sprites.git",
+  "author": "Adrian Stainforth <adrian.stainforth@gmail.com>",
   "bin": {
     "asset-pipeline-sprites": "./bin/build.js"
   },
+  "license": "MIT",
   "scripts": {
+    "lint": "eslint plugin/ --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/djforth/ap_sprites.git"
-  },
-  "author": "A Stainforth",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/djforth/ap_sprites/issues"
-  },
-  "homepage": "https://github.com/djforth/ap_sprites#readme",
-  "devDependencies": {
-    "@djforth/ap_utils": "^2.0.13",
-    "chai": "^3.5.0",
-    "eslint": "^2.1.0",
-    "eslint-config-google": "^0.4.0",
-    "mocha": "^2.4.5"
+  "peerDependencies": {
+    "@djforth/ap_utils": "^3.0.1"
   },
   "dependencies": {
     "commander": "^2.9.0",
-    "event-stream": "^3.3.2",
-    "lodash": "^4.6.0",
-    "readdirp": "^2.0.0",
-    "spritesheet-templates": "^10.1.0",
+    "event-stream": "^3.3.4",
+    "lodash": "^4.17.4",
+    "readdirp": "^2.1.0",
+    "spritesheet-templates": "^10.2.1",
     "spritesmith": "^3.1.0"
   },
-  "peerDependancies": {
-    "@djforth/ap_utils": "^2.0.13"
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.13.1",
+    "eslint-config-google": "^0.7.1",
+    "eslint-config-morsedigital": "^1.1.0",
+    "mocha": "^3.2.0"
   }
 }
