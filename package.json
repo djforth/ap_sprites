@@ -10,10 +10,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint plugin/ --fix",
+    "lint:bin": "eslint bin/ --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "@djforth/ap_utils": "^3.0.1"
+    "@djforth/ap_utils": ">=3.0.4"
   },
   "dependencies": {
     "commander": "^2.9.0",
@@ -21,9 +22,11 @@
     "lodash": "^4.17.4",
     "readdirp": "^2.1.0",
     "spritesheet-templates": "^10.2.1",
-    "spritesmith": "^3.1.0"
+    "spritesmith": "^3.1.0",
+    "svg-sprite": "^1.3.6"
   },
   "devDependencies": {
+    "@djforth/ap_utils": "^3.0.4",
     "chai": "^3.5.0",
     "eslint": "^3.13.1",
     "eslint-config-google": "^0.7.1",

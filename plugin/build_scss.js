@@ -8,7 +8,7 @@ var templater   = require('spritesheet-templates');
 create.folder(config.get('cssout'));
 
 function addImageUrl(data){
-  return data.replace(/url\(([^)]*)\)/igm, "image-url('$1')");
+  return data.replace(/url\(([^)]*)\)/igm, "url('$1')");
 }
 
 function setName(output, scss){
@@ -44,8 +44,8 @@ function processSpritesheet(sheet, iu){
 
   var obj = {
     add: function(type){
-      var css = sheet(type);
-      sprite_css += (iu) ? addImageUrl(css) : css;
+      sprite_css += sheet(type);
+      // sprite_css += (iu) ? addImageUrl(css) : css;
       return obj;
     }
     , result: function(){
