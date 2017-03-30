@@ -1,13 +1,13 @@
 #! /usr/bin/env node
 
-const _ = require('lodash')
-const config = require('../plugin/config')
-const es = require('event-stream')
-const fs = require('fs')
+const _ = require('lodash');
+const config = require('../plugin/config');
+const es = require('event-stream');
 const {read} = require('@djforth/ap_utils');
-const path = require('path')
-const program = require('commander')
+const path = require('path');
+const program = require('commander');
 const buildSvgSprites = require('../plugin/build_svgs');
+const buildInlineSvgSprites = require('../plugin/build_inline_svg');
 const buildSprites = require('../plugin/build_sprites');
 const storeFiles = require('../plugin/store');
 
@@ -20,6 +20,7 @@ program
   .option('-c, --css', 'build css')
   .option('-s, --scss', 'build scss')
   .option('-v, --svg', 'build svg sprites')
+  .option('-vi, --svginline', 'build inline svg sprites')
   .parse(process.argv);
 
 var manageFiles = storeFiles();
@@ -30,28 +31,59 @@ options.forEach((op)=>{
     config.set(op, program[op]);
   }
 });
-// console.log(program.ext)
-let ext = (program.svg) ? '*.svg' : config.get('ext');
-console.log(ext, program.svg);
-let folder = (program.svg) ? 'svgs' : 'pngs';
-let input = path.resolve(config.get('input'), folder);
+
+const getType = (program)=>{
+  return ['svg', 'svginline'].reduce((val, key)=>{
+    if (_.has(program, key) && program[key]) return key;
+    return val;
+  }, 'png');
+};
+
+const setRead = (config, type)=>{
+  let input = config.get('input');
+  switch (type){
+    case 'svg':
+      return {
+        build: buildSvgSprites
+        , ext: '*.svg'
+        , input: path.resolve(input, config.get('svgFolder'))
+      };
+    case 'svginline':
+      return {
+        build: buildInlineSvgSprites
+        , ext: '*.svg'
+        , input: path.resolve(input, config.get('svgInlineFolder'))
+      };
+    default:
+      return {
+        build: buildSprites
+        , ext: config.get('ext')
+        , input: path.resolve(input, config.get('pngFolder'))
+      };
+  }
+};
+
+
+const {build, ext, input} = setRead(config, getType(program));
+console.log(getType(program), input, ext)
 // Gets all sprite files
 read(input, ext)
   .on('end', (d)=>{
-    if (program.svg){
-      buildSvgSprites(manageFiles);
-    } else {
-      buildSprites(manageFiles);
-    }
+    build(manageFiles);
+    // if (program.svg){
+    //   buildSvgSprites(manageFiles);
+    // } else if (program.inlinesvg){
+    //   buildInlineSvgSprites(manageFiles);
+    // } else {
+    //   buildSprites(manageFiles);
+    // }
   })
   .pipe(es.mapSync(function(entry){
-    var ext = path.extname(entry.path);
     if (entry.path.match(/(.DS_Store$)/)){
       return null;
     }
     return {path: entry.fullPath, dir: entry.parentDir};
   }))
   .pipe(es.map(function(d){
-    // console.log(d)
     if (!_.isNull(d)) manageFiles(d);
   }));

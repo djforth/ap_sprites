@@ -25,7 +25,6 @@ const folderExtent = (output)=>{
 const buildConfig = (output)=>{
   let scss_output = scssOutput(output);
   let folder_extent = folderExtent(output);
-  console.log('folder_extent', folder_extent);
   return {
     dest: config.get('output')
     , log: 'info'
