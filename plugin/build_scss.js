@@ -1,24 +1,24 @@
-var _           = require('lodash');
-var config      = require('./config');
-var create      = require('@djforth/ap_utils').create;
-var fs          = require('fs');
-var path        = require('path');
-var templater   = require('spritesheet-templates');
+var _ = require("lodash");
+var config = require("./config");
+const create = require("./create");
+var fs = require("fs");
+var path = require("path");
+var templater = require("spritesheet-templates");
 
-create.folder(config.get('cssout'));
+create.folder(config.cssout);
 
-function addImageUrl(data){
-  return data.replace(/url\(([^)]*)\)/igm, "url('$1')");
+function addImageUrl(data) {
+  return data.replace(/url\(([^)]*)\)/gim, "url('$1')");
 }
 
-function setName(output, scss){
-  var ext = (scss) ? '.scss' : '.css';
-  return '_' + output + ext;
+function setName(output, scss) {
+  var ext = scss ? ".scss" : ".css";
+  return "_" + output + ext;
 }
 
-function getCoordinates(coordinates){
+function getCoordinates(coordinates) {
   var coords = [];
-  _.forIn(coordinates, (v, k)=>{
+  _.forIn(coordinates, (v, k) => {
     var obj = {
       name: path.parse(k).name
     };
@@ -28,27 +28,32 @@ function getCoordinates(coordinates){
   return coords;
 }
 
-function getSpriteSheet(sprites, props, spritesheet){
-  return function(fmt){
-    return templater({
-      sprites: sprites
-      , spritesheet: {
-        width: props.width, height: props.height, image: spritesheet
-      }
-    }, {format: fmt});
+function getSpriteSheet(sprites, props, spritesheet) {
+  return function(fmt) {
+    return templater(
+      {
+        sprites: sprites,
+        spritesheet: {
+          width: props.width,
+          height: props.height,
+          image: spritesheet
+        }
+      },
+      { format: fmt }
+    );
   };
 }
 
-function processSpritesheet(sheet, iu){
-  var sprite_css = '';
+function processSpritesheet(sheet, iu) {
+  var sprite_css = "";
 
   var obj = {
-    add: function(type){
+    add: function(type) {
       sprite_css += sheet(type);
       // sprite_css += (iu) ? addImageUrl(css) : css;
       return obj;
-    }
-    , result: function(){
+    },
+    result: function() {
       return sprite_css;
     }
   };
@@ -57,17 +62,14 @@ function processSpritesheet(sheet, iu){
 }
 
 // Builds css
-module.exports = function(result, sprite, output){
+module.exports = function(result, sprite, output) {
   var coords = getCoordinates(result.coordinates);
-  var sheet  = getSpriteSheet(coords, result.properties, sprite);
-  var sprite_css = processSpritesheet(sheet, config.get('image_url'));
+  var sheet = getSpriteSheet(coords, result.properties, sprite);
+  var sprite_css = processSpritesheet(sheet, config.imageUrl);
 
-  if (config.get('scss')) sprite_css.add('scss');
-  if (config.get('css')) sprite_css.add('css');
+  if (config.scss) sprite_css.add("scss");
+  if (config.css) sprite_css.add("css");
 
-  var file = path.resolve(
-    config.get('cssout')
-    , setName(output, config.get('scss'))
-  );
+  var file = path.resolve(config.cssout, setName(output, config.scss));
   fs.writeFileSync(file, sprite_css.result());
 };

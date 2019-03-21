@@ -1,31 +1,28 @@
-# Asset Pipeline - Sprites
+# Create Sprites & SVG sprites
 
-This is a wrapper for spritesheet that will eventually become a plugin for a larger project to manage the whole build process.
+This is a wrapper for spritesheet & svgstore for creating sprites
 
-It can be used however on it's own.  To install run:
+It can be used however on it's own. To install run:
 
 ```bash
 npm install @djforth/ap_sprites -g
 ```
 
-
 Now add the configuration details to your package.json like so (N.B. These are the defaults):
 
 ```json
-"assets": {
-    "sprites": {
-      "input": "app/assets_uncompiled/sprites",
-      "output": "app/assets_uncompiled/images/sprites",
-      "cssout": "app/assets_uncompiled/stylesheets/sprites",
-      "css":true,
-      "scss":true,
-      "image_url":true,
-      "root_path":"sprites",
-      "ext": [
-        "*.png",
-        "*.gif"
-      ]
-    }
+  "sprites": {
+      "css": true,
+      "cssout": "app/javascript/stylesheets/sprites",
+      "input": "app/javascript/sprites",
+      "output": "app/javascript/images/sprites",
+      "ext": ["*.png", "*.gif"],
+      "scss": true,
+      "imageUrl": true,
+      "rootPath": "images/sprites",
+      "pngFolder": "pngs",
+      "svgFolder": "svgs",
+      "svgOutput": "app/assets/images"
   }
 
 ```
